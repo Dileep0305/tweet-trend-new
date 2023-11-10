@@ -25,15 +25,15 @@ environment {
         }
 
         stage('SonarQube analysis') {
-    environment {
-      scannerHome = tool 'Sonar-scanner'
+            environment {
+             scannerHome = tool 'Sonar-scanner'
     }
-    steps{
-    withSonarQubeEnv('sonarcloud-server') { // If you have configured more than one global server connection, you can specify its name
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-    }
-  }
+         steps{
+            withSonarQubeEnv('sonarcloud-server') { // If you have configured more than one global server connection, you can specify its name
+                 sh "${scannerHome}/bin/sonar-scanner"
+              }
+         }
+              }
     }
 
     stage("Quality Gate"){
@@ -41,7 +41,7 @@ environment {
             script{
                 timeout(time: 1, unit: 'HOURS'){
                     def qg = waitForQualityGate()
-                    if (qg.status != 'ok'){
+                    if (qg.status != 'OK'){
                         error "Pipeline aborted due to Quality Gate Failure: ${qg.status}"
                     }
                 }
