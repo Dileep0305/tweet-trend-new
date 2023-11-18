@@ -1,4 +1,7 @@
 def registry = 'https://dileepj05.jfrog.io/'
+def imageName = 'dileepj05.jfrog.io/dileepj05-docker-local/ttrend'
+def version   = '2.1.2'
+   
 pipeline {
     agent {
         node {
@@ -53,7 +56,7 @@ environment {
         }
 
              
-         stage("Jar Publish") {
+  stage("Jar Publish") {
         steps {
             script {
                     echo '<--------------- Jar Publish Started --------------->'
@@ -78,6 +81,28 @@ environment {
             }
         }   
     }   
-}
-}
+
+   stage(" Docker Build ") {
+      steps {
+        script {
+           echo '<--------------- Docker Build Started --------------->'
+           app = docker.build(imageName+":"+version)
+           echo '<--------------- Docker Build Ends --------------->'
+        }
+      }
+    }
+
+   stage (" Docker Publish "){
+        steps {
+            script {
+               echo '<--------------- Docker Publish Started --------------->'  
+                docker.withRegistry(registry, 'Jfrog'){
+                    app.push()
+                }    
+               echo '<--------------- Docker Publish Ended --------------->'  
+            }
+        }
+    }
+  }
+ }
 
