@@ -28,16 +28,16 @@ environment {
             }
         }
 
-        stage('SonarQube analysis') {
+     stage('SonarQube analysis') {
             environment {
              scannerHome = tool 'Sonar-scanner'
-    }
+           }
          steps{
             withSonarQubeEnv('sonarcloud-server') { // If you have configured more than one global server connection, you can specify its name
                  sh "${scannerHome}/bin/sonar-scanner"
               }
          }
-              }
+        }
     
 
     stage('Quality Gate') {
@@ -53,7 +53,7 @@ environment {
             }
          }
          
-        }
+    }
 
              
   stage("Jar Publish") {
